@@ -1,73 +1,102 @@
 {
-  "name": "dtalite",
-  "version": "4.0.0",
-  "description": "DownThemAll! lite - The mass downloader WebExtension",
+  "name": "downthemall-ai-enhanced",
+  "version": "4.2.0-alpha",
+  "description": "DownThemAll! WebExtension - AI-Enhanced Mass Downloader with OCR, Analysis, and Visualization",
   "main": "main.js",
+  "type": "module",
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
+  },
   "directories": {
-    "lib": "lib"
+    "lib": "lib",
+    "test": "tests"
+  },
+  "scripts": {
+    "build": "python3 util/build.py --mode=release",
+    "build:dev": "python3 util/build.py --mode=development",
+    "build:ai": "webpack --config webpack.ai.config.js --mode=production",
+    "build:cleanup": "rm -rf bundles dist web-ext-artifacts",
+    "build:bundles": "webpack --mode=production",
+    "build:bundles:dev": "webpack --mode=development",
+    "build:regexps": "node util/makexregexps.js > data/xregexps.json",
+    "dev": "concurrently \"npm run watch\" \"npm run webext\" \"npm run ai:dev\"",
+    "dev:ai": "webpack --config webpack.ai.config.js --watch --mode=development",
+    "lint": "eslint . --ext .ts,.js --fix",
+    "lint:check": "eslint . --ext .ts,.js",
+    "test": "LANG=en mocha -r ts-node/register -r chai/register-expect.js tests/**/*.test.ts",
+    "test:ai": "LANG=en mocha -r ts-node/register tests/ai/**/*.test.ts",
+    "test:watch": "npm test -- --watch",
+    "test:coverage": "nyc npm test",
+    "typecheck": "tsc --noEmit",
+    "watch": "webpack --watch --mode=development",
+    "webext": "web-ext run -i 'lib/*' -i '**/node_modules/**' --bc -p ../dtalite.p --keep-profile-changes",
+    "webext:build": "web-ext build --overwrite-dest",
+    "security": "npm audit",
+    "update-deps": "npm update && npm audit fix",
+    "stats": "cloc --vcs=git --exclude-lang=Markdown,SVG",
+    "prepare": "husky install || true",
+    "ai:models:download": "node scripts/download-ai-models.js",
+    "ai:benchmark": "node scripts/benchmark-ai-performance.js",
+    "visualize:bundle": "webpack-bundle-analyzer bundles/stats.json"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/GlacierEQ/downthemall.git"
+    "url": "https://github.com/glaciereq/downthemall.git"
   },
-  "bugs": {
-    "url": "https://github.com/GlacierEQ/downthemall/issues"
-  },
-  "homepage": "https://github.com/GlacierEQ/downthemall#readme",
   "keywords": [
+    "downthemall",
     "webextension",
-    "downloader",
+    "browser-extension",
+    "download-manager",
+    "mass-downloader",
     "firefox",
     "chrome",
-    "browser-extension",
-    "download-manager"
+    "typescript",
+    "ai",
+    "artificial-intelligence",
+    "ocr",
+    "pdf-processing",
+    "content-analysis",
+    "mindmap",
+    "flowchart",
+    "visualization",
+    "machine-learning",
+    "nlp",
+    "computer-vision"
   ],
-  "scripts": {
-    "build": "util/build.py",
-    "build:cleanup": "rm -rf bundles web-ext-artifacts",
-    "build:bundles": "webpack --mode=production",
-    "build:dev": "webpack --mode=development",
-    "build:regexps": "node util/makexregexps.js > data/xregexps.json",
-    "dev": "concurrently \"yarn watch\" \"yarn webext\"",
-    "lint": "eslint . --ext .ts,.js --fix",
-    "lint:check": "eslint . --ext .ts,.js",
-    "pretest": "yarn build:regexps",
-    "stats": "cloc --vcs=git --exclude-lang=Markdown,SVG",
-    "test": "LANG=en mocha -r ts-node/register tests/**/*.test.ts",
-    "test:coverage": "nyc yarn test",
-    "type-check": "tsc --noEmit",
-    "watch": "webpack --watch --mode=development",
-    "webext": "web-ext run -i 'lib/*' -i '**/node_modules/**' --bc -p ../dtalite.p --keep-profile-changes",
-    "webext:build": "web-ext build --overwrite-dest"
-  },
-  "author": {
-    "name": "Nils Maier",
-    "email": "nils@downthemall.org",
-    "url": "https://downthemall.org"
-  },
+  "author": "Nils Maier",
+  "contributors": ["GlacierEQ"],
   "license": "MIT",
-  "engines": {
-    "node": ">=18.0.0",
-    "npm": ">=9.0.0"
+  "bugs": {
+    "url": "https://github.com/glaciereq/downthemall/issues"
   },
+  "homepage": "https://github.com/glaciereq/downthemall#readme",
   "devDependencies": {
-    "@eslint/js": "^9.11.1",
-    "@types/chai": "^5.0.0",
-    "@types/mocha": "^10.0.8",
-    "@types/node": "^22.5.0",
-    "@typescript-eslint/eslint-plugin": "^8.6.0",
-    "@typescript-eslint/parser": "^8.6.0",
+    "@types/node": "^22.5.4",
+    "@types/mocha": "^10.0.7",
+    "@types/chai": "^4.3.19",
+    "@types/d3": "^7.4.3",
+    "@types/file-saver": "^2.0.7",
+    "@typescript-eslint/eslint-plugin": "^8.5.0",
+    "@typescript-eslint/parser": "^8.5.0",
     "chai": "^5.1.1",
     "concurrently": "^9.0.1",
-    "eslint": "^9.11.1",
-    "globals": "^15.9.0",
+    "eslint": "^9.10.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "husky": "^9.1.6",
+    "lint-staged": "^15.2.10",
     "mocha": "^10.7.3",
     "nyc": "^17.1.0",
+    "prettier": "^3.3.3",
     "ts-loader": "^9.5.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.6.2",
-    "webpack": "^5.95.0",
+    "web-ext": "^8.2.0",
+    "webpack": "^5.94.0",
     "webpack-cli": "^5.1.4",
+    "webpack-bundle-analyzer": "^4.10.2",
     "xregexp": "^5.1.1"
   },
   "dependencies": {
@@ -76,7 +105,59 @@
     "localforage": "^1.10.0",
     "psl": "^1.9.0",
     "webextension-polyfill": "^0.12.0",
-    "whatwg-mimetype": "^4.0.0"
+    "whatwg-mimetype": "^4.0.0",
+    "tesseract.js": "^5.1.0",
+    "pdf-lib": "^1.17.1",
+    "pdfjs-dist": "^4.6.82",
+    "d3": "^7.9.0",
+    "chart.js": "^4.4.4",
+    "compromise": "^14.14.0",
+    "sentiment": "^5.0.2",
+    "natural": "^7.0.7",
+    "ml-matrix": "^6.11.1",
+    "ml-kmeans": "^6.0.0",
+    "stopword": "^3.0.1",
+    "franc": "^6.2.0",
+    "reading-time": "^1.5.0",
+    "file-saver": "^2.0.5",
+    "jszip": "^3.10.1",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^2.5.1",
+    "mammoth": "^1.8.0",
+    "xml2js": "^0.6.2",
+    "marked": "^13.0.3",
+    "dompurify": "^3.1.6",
+    "fuse.js": "^7.0.0",
+    "lru-cache": "^11.0.1",
+    "web-streams-polyfill": "^4.0.0",
+    "comlink": "^4.4.1"
+  },
+  "optionalDependencies": {
+    "@tensorflow/tfjs": "^4.21.0",
+    "@tensorflow/tfjs-node": "^4.21.0",
+    "onnxruntime-web": "^1.19.2",
+    "sharp": "^0.33.5"
+  },
+  "peerDependencies": {
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    },
+    "react-dom": {
+      "optional": true
+    }
+  },
+  "lint-staged": {
+    "*.{ts,js}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{md,json}": [
+      "prettier --write"
+    ]
   },
   "nyc": {
     "extension": [
@@ -86,12 +167,76 @@
       "**/*.d.ts",
       "tests/**/*",
       "bundles/**/*",
-      "web-ext-artifacts/**/*"
+      "web-ext-artifacts/**/*",
+      "lib/ai-models/**/*"
     ],
     "reporter": [
       "html",
+      "lcov",
       "text"
     ],
     "all": true
+  },
+  "browserslist": [
+    "last 2 Chrome versions",
+    "last 2 Firefox versions",
+    "last 2 Safari versions",
+    "last 2 Edge versions"
+  ],
+  "extensionManifest": {
+    "permissions": [
+      "downloads",
+      "storage",
+      "contextMenus",
+      "activeTab",
+      "webRequest",
+      "webRequestBlocking",
+      "unlimitedStorage"
+    ],
+    "optionalPermissions": [
+      "tabs",
+      "background",
+      "offscreen"
+    ]
+  },
+  "aiCapabilities": {
+    "ocrLanguages": [
+      "eng",
+      "spa",
+      "fra",
+      "deu",
+      "ita",
+      "por",
+      "rus",
+      "chi_sim",
+      "chi_tra",
+      "jpn",
+      "kor",
+      "ara",
+      "hin"
+    ],
+    "analysisModels": {
+      "sentiment": "built-in",
+      "entities": "compromise",
+      "topics": "lda",
+      "similarity": "cosine",
+      "classification": "naive-bayes"
+    },
+    "visualizations": {
+      "mindmap": "d3",
+      "flowchart": "d3",
+      "networkGraph": "d3",
+      "timeline": "d3",
+      "charts": "chart.js"
+    },
+    "compression": {
+      "pdf": "pdf-lib",
+      "images": "sharp",
+      "archives": "jszip"
+    }
+  },
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/glaciereq"
   }
 }
