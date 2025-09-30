@@ -51,6 +51,7 @@
     "npm": ">=9.0.0"
   },
   "devDependencies": {
+    "@eslint/js": "^9.11.1",
     "@types/chai": "^5.0.0",
     "@types/mocha": "^10.0.8",
     "@types/node": "^22.5.0",
@@ -59,6 +60,7 @@
     "chai": "^5.1.1",
     "concurrently": "^9.0.1",
     "eslint": "^9.11.1",
+    "globals": "^15.9.0",
     "mocha": "^10.7.3",
     "nyc": "^17.1.0",
     "ts-loader": "^9.5.1",
