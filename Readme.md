@@ -7,9 +7,37 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.6-blue.svg)](https://www.typescriptlang.org/)
 [![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)](https://nodejs.org/)
 
-The DownThemAll! WebExtension - A modernized and stabilized fork.
+The DownThemAll! WebExtension - A modernized and stabilized fork ready for extension store publishing.
 
 For those still on supported browser: [Non-WebExtension legacy code](https://github.com/downthemall/downthemall-legacy).
+
+## 🎆 Extension Store Publishing
+
+**Ready for Upload!** This extension has been prepared for publishing to major browser stores:
+
+### Quick Publishing
+
+```bash
+# Automated packaging for both stores
+chmod +x scripts/package-for-stores.sh
+./scripts/package-for-stores.sh
+```
+
+This creates store-ready packages:
+- **Chrome Web Store**: `downthemall-chrome-v4.13.1.zip` (Manifest V3)
+- **Firefox Add-ons**: `downthemall-firefox-v4.13.1.zip` (Manifest V2)
+
+### Store Links
+- **Chrome Web Store**: [Developer Dashboard](https://chrome.google.com/webstore/devconsole/)
+- **Firefox Add-ons**: [Developer Hub](https://addons.mozilla.org/developers/)
+
+📚 **Detailed Instructions**: See [PUBLISHING_GUIDE.md](PUBLISHING_GUIDE.md) for complete submission process.
+
+### For Users
+Once published, users can install from:
+- Chrome Web Store (search "DownThemAll")
+- Firefox Add-ons (search "DownThemAll")
+- Manual installation (see publishing guide)
 
 ## About
 
@@ -39,6 +67,7 @@ But it is what it is...
 - **Enhanced Build System**: Improved webpack configuration and scripts
 - **Test Coverage**: Comprehensive testing with coverage reporting
 - **Security Auditing**: Automated vulnerability scanning
+- **Store Publishing**: Ready for Chrome Web Store and Firefox Add-ons
 
 See [UPGRADE_GUIDE.md](UPGRADE_GUIDE.md) for detailed migration information.
 
@@ -82,6 +111,10 @@ yarn build:dev          # Development build with source maps
 yarn build:bundles      # Production build
 yarn build              # Full release build (requires Python)
 yarn build:cleanup      # Clean all build artifacts
+
+# Store packaging
+yarn package:chrome     # Package for Chrome Web Store
+yarn package:firefox    # Package for Firefox Add-ons
 
 # Code quality
 yarn lint               # Run ESLint with auto-fix
@@ -145,7 +178,10 @@ yarn build:bundles
 To create release packages for distribution:
 
 ```bash
-# Basic builds
+# Quick store packaging (recommended)
+./scripts/package-for-stores.sh
+
+# Manual builds
 yarn build
 
 # Advanced release builds (requires Python 3.9+)
@@ -153,8 +189,10 @@ python3 util/build.py --mode=release
 ```
 
 Output files will be in `web-ext-artifacts/`:
-- `*-fx.zip` - Firefox builds
-- `*-crx.zip` - Chrome/Chromium builds  
+- `*-chrome-*.zip` - Chrome Web Store ready packages
+- `*-firefox-*.zip` - Firefox Add-ons ready packages
+- `*-fx.zip` - Firefox builds (legacy naming)
+- `*-crx.zip` - Chrome/Chromium builds (legacy naming)
 - `*-opr.zip` - Opera builds
 
 ### Testing
@@ -232,3 +270,6 @@ MIT License - see [LICENSE.md](LICENSE.md) for details.
 - **Original Project**: [downthemall/downthemall](https://github.com/downthemall/downthemall)
 - **Website**: [downthemall.org](https://downthemall.org/)
 - **Legacy Extension**: [downthemall-legacy](https://github.com/downthemall/downthemall-legacy)
+- **Publishing Guide**: [PUBLISHING_GUIDE.md](PUBLISHING_GUIDE.md)
+- **Chrome Web Store**: [Developer Dashboard](https://chrome.google.com/webstore/devconsole/)
+- **Firefox Add-ons**: [Developer Hub](https://addons.mozilla.org/developers/)
