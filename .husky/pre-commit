@@ -1,0 +1,14 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Run lint-staged for formatting and linting
+npx lint-staged
+
+# Type check
+npm run typecheck
+
+# Run tests if any TypeScript files changed
+if git diff --cached --name-only | grep -E '\.(ts|tsx)$' > /dev/null; then
+  echo "TypeScript files changed, running tests..."
+  npm test
+fi
